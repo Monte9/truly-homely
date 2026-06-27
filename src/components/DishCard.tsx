@@ -24,7 +24,7 @@ export default function DishCard({
 
   const enter: Transition = reduce
     ? { duration: 0 }
-    : { duration: 0.4, ease: EASE, delay: Math.min(index * 0.04, 0.4) };
+    : { duration: 0.45, ease: EASE, delay: Math.min(index * 0.035, 0.3) };
 
   function onScroll() {
     const el = scroller.current;
@@ -43,9 +43,9 @@ export default function DishCard({
       layout
       data-testid="dish-card"
       data-slug={item.slug}
-      initial={reduce ? false : { opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
+      initial={reduce ? false : { opacity: 0, scale: 0.94 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
       transition={enter}
       whileHover={reduce ? undefined : { y: -6 }}
       className="group overflow-hidden rounded-3xl border border-line bg-card shadow-[0_2px_10px_rgba(58,42,29,0.06)] transition-shadow duration-300 hover:shadow-[0_18px_40px_rgba(58,42,29,0.16)]"

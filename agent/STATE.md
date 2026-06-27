@@ -1,9 +1,9 @@
 # Harness State
 
 - phase: build
-- sprint: 1-3 done (sprint 3 = card carousel + fullscreen lightbox + tags)
+- sprint: 1-4 done (sprint 4 = lightbox swipe/z-index + smoother motion)
 - attempts: 0
-- last_verdict: PASS (sprint 3)
+- last_verdict: PASS (sprint 4)
 - updated: 2026-06-27
 
 Phase is one of: plan | build | blocked. See `.claude/skills/build-sprint/SKILL.md` for the transition table.
@@ -24,3 +24,4 @@ pass gated on a taste audit; run it only if the human wants more refinement.
 | 2026-06-27 | 1 | build | FAIL attempt 1 (favicon 404 console error); PASS attempt 2, landed on main |
 | 2026-06-27 | 2 | build | taste audit -> 2 blockers fixed (translucent filter bar, mobile filter clip) + detail "More from the kitchen"; PASS, landed on main |
 | 2026-06-27 | 3 | build | Monte's asks: removed detail page -> fullscreen lightbox; card image carousel w/ dots; all tags on card; PASS, landed on main |
+| 2026-06-27 | 4 | build | Monte's asks: lightbox swipe + button z-index, smoother open/close, fade-in filtering; PASS, landed on main |

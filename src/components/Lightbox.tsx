@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion, type PanInfo } from "motion/react";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 export default function Lightbox({
   images,
@@ -17,19 +19,24 @@ export default function Lightbox({
   reduce: boolean;
   onClose: () => void;
 }) {
-  const [current, setCurrent] = useState(index);
+  // [current photo, direction of last move] so slides animate the right way
+  const [[current, dir], setState] = useState<[number, number]>([index, 0]);
   const multi = images.length > 1;
 
-  const go = useCallback(
-    (dir: number) => setCurrent((c) => (c + dir + images.length) % images.length),
+  const paginate = useCallback(
+    (d: number) => setState(([c]) => [(c + d + images.length) % images.length, d]),
     [images.length]
+  );
+  const jumpTo = useCallback(
+    (i: number) => setState(([c]) => [i, i > c ? 1 : -1]),
+    []
   );
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowRight") go(1);
-      else if (e.key === "ArrowLeft") go(-1);
+      else if (e.key === "ArrowRight") paginate(1);
+      else if (e.key === "ArrowLeft") paginate(-1);
     }
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
@@ -38,7 +45,19 @@ export default function Lightbox({
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [go, onClose]);
+  }, [paginate, onClose]);
+
+  function onDragEnd(_e: unknown, info: PanInfo) {
+    const swipe = info.offset.x + info.velocity.x * 0.2;
+    if (multi && swipe < -70) paginate(1);
+    else if (multi && swipe > 70) paginate(-1);
+  }
+
+  const slideVariants = {
+    enter: (d: number) => (reduce ? { opacity: 0 } : { opacity: 0, x: d > 0 ? 80 : -80 }),
+    center: { opacity: 1, x: 0 },
+    exit: (d: number) => (reduce ? { opacity: 0 } : { opacity: 0, x: d > 0 ? -80 : 80 }),
+  };
 
   return (
     <motion.div
@@ -46,65 +65,83 @@ export default function Lightbox({
       aria-modal="true"
       aria-label={name}
       data-testid="lightbox"
-      initial={reduce ? false : { opacity: 0 }}
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={reduce ? { opacity: 0 } : { opacity: 0 }}
-      transition={{ duration: reduce ? 0 : 0.2 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: reduce ? 0 : 0.25 }}
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/92 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/92 p-4 backdrop-blur-md sm:p-10"
     >
       <button
         type="button"
         onClick={onClose}
         data-testid="lightbox-close"
         aria-label="Close"
-        className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-2xl text-white transition-colors hover:bg-white/25"
+        className="absolute right-4 top-4 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-2xl text-white shadow-lg backdrop-blur transition-colors hover:bg-white/30"
       >
         ×
       </button>
 
       <motion.div
-        key={current}
-        initial={reduce ? false : { opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: reduce ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+        initial={reduce ? false : { scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={reduce ? { opacity: 0 } : { scale: 0.92, opacity: 0 }}
+        transition={reduce ? { duration: 0 } : { duration: 0.32, ease: EASE }}
         onClick={(e) => e.stopPropagation()}
-        className="relative h-full w-full max-w-5xl"
+        className="relative z-10 h-full w-full max-w-5xl"
       >
-        <Image
-          src={images[current]}
-          alt={name}
-          fill
-          priority
-          sizes="100vw"
-          className="object-contain"
-        />
+        <AnimatePresence custom={dir} initial={false} mode="popLayout">
+          <motion.div
+            key={current}
+            custom={dir}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={reduce ? { duration: 0 } : { duration: 0.3, ease: EASE }}
+            drag={multi ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragEnd={onDragEnd}
+            className="absolute inset-0 cursor-grab active:cursor-grabbing"
+          >
+            <Image
+              src={images[current]}
+              alt={name}
+              fill
+              priority
+              draggable={false}
+              sizes="100vw"
+              className="select-none object-contain"
+            />
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
 
       {multi && (
         <>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); go(-1); }}
+            onClick={(e) => { e.stopPropagation(); paginate(-1); }}
             aria-label="Previous photo"
-            className="absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-2xl text-white transition-colors hover:bg-white/25 sm:left-6"
+            className="absolute left-3 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-2xl text-white shadow-lg backdrop-blur transition-colors hover:bg-white/30 sm:left-6"
           >
             ‹
           </button>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); go(1); }}
+            onClick={(e) => { e.stopPropagation(); paginate(1); }}
             aria-label="Next photo"
-            className="absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-2xl text-white transition-colors hover:bg-white/25 sm:right-6"
+            className="absolute right-3 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-2xl text-white shadow-lg backdrop-blur transition-colors hover:bg-white/30 sm:right-6"
           >
             ›
           </button>
-          <div className="absolute inset-x-0 bottom-5 flex justify-center gap-2">
+          <div className="absolute inset-x-0 bottom-5 z-30 flex justify-center gap-2">
             {images.map((src, i) => (
               <button
                 key={src}
                 type="button"
-                onClick={(e) => { e.stopPropagation(); setCurrent(i); }}
+                onClick={(e) => { e.stopPropagation(); jumpTo(i); }}
                 aria-label={`Photo ${i + 1}`}
                 aria-current={i === current}
                 className={`h-2 rounded-full transition-all ${
