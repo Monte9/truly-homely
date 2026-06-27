@@ -19,7 +19,13 @@ sprint. One sprint in flight at a time.
 
 ---
 
-## Sprint 1 - Menu browsing experience [pending]
+## Sprint 1 - Menu browsing experience [done]
+
+> Landed on main 2026-06-27. Verdict: PASS on attempt 2 (attempt 1 failed only
+> on a missing-favicon console 404; fixed by adding src/app/icon.svg). See
+> agent/evals/20260627-023940-sprint-1.md and
+> agent/evals/20260627-024209-sprint-1-attempt-2.md.
+
 
 **Goal:** Ship the full warm, homely menu: a photo grid of dishes with category
 filtering and a per-dish detail view, driven entirely by `src/data/menu.json`,
