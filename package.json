@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build:menu": "node scripts/build-menu.mjs",
+    "predev": "node scripts/build-menu.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/build-menu.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "motion": "^12.42.0",
     "next": "^15.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
@@ -18,6 +22,7 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "playwright": "^1.61.1",
     "tailwindcss": "^4.1.13",
     "typescript": "^5"
   }

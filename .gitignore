@@ -38,3 +38,7 @@ agent/evals/shots/
 
 # generated image thumbnails (rebuilt at predev/prebuild)
 public/**/thumbs/
+
+# generated menu dataset + web-served photos (rebuilt from data/source at predev/prebuild)
+/public/menu/
+/src/data/menu.json
