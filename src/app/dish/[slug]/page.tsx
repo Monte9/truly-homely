@@ -1,8 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import DishGallery from "@/components/DishGallery";
-import { getDish, getSlugs } from "@/lib/menu";
+import { getDish, getRelated, getSlugs } from "@/lib/menu";
 
 export function generateStaticParams() {
   return getSlugs().map((slug) => ({ slug }));
@@ -30,6 +31,7 @@ export default async function DishPage({
   const { slug } = await params;
   const dish = getDish(slug);
   if (!dish) notFound();
+  const related = getRelated(dish.slug, 4);
 
   return (
     <main
@@ -81,7 +83,39 @@ export default async function DishPage({
             ))}
           </div>
         )}
+
+        <p className="mt-8 max-w-prose text-lg leading-relaxed text-ink-soft">
+          Made fresh and served the homely way, just like home.
+        </p>
       </div>
+
+      {related.length > 0 && (
+        <section className="mt-14 border-t border-line pt-10">
+          <h2 className="font-serif text-2xl text-ink">More from the kitchen</h2>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {related.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/dish/${item.slug}`}
+                className="group block overflow-hidden rounded-2xl border border-line bg-card shadow-[0_2px_10px_rgba(58,42,29,0.06)] transition-shadow duration-300 hover:shadow-[0_14px_30px_rgba(58,42,29,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+              >
+                <div className="relative aspect-square overflow-hidden bg-paper-2">
+                  <Image
+                    src={item.images[0]}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 640px) 50vw, 200px"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                </div>
+                <p className="truncate px-3 py-2.5 font-serif text-sm text-ink">
+                  {item.name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

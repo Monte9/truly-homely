@@ -39,3 +39,18 @@ export function getDish(slug: string): MenuItem | undefined {
 export function getSlugs(): string[] {
   return menu.items.map((i) => i.slug);
 }
+
+// Other dishes to surface on a dish page: prefer ones sharing a category, then
+// fill from the rest of the menu so the section is always satisfyingly full.
+export function getRelated(slug: string, limit = 4): MenuItem[] {
+  const dish = getDish(slug);
+  if (!dish) return [];
+  const others = menu.items.filter((i) => i.slug !== slug);
+  const sameType = others.filter((i) => i.types.some((t) => dish.types.includes(t)));
+  const picked: MenuItem[] = [];
+  for (const item of [...sameType, ...others]) {
+    if (picked.length >= limit) break;
+    if (!picked.some((p) => p.slug === item.slug)) picked.push(item);
+  }
+  return picked;
+}

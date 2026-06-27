@@ -63,7 +63,14 @@ accessible, and reduced-motion aware.
 
 ---
 
-## Sprint 2 - Taste and motion polish [pending] (optional)
+## Sprint 2 - Taste and motion polish [done]
+
+> Landed on main 2026-06-27. Verdict: PASS. Taste audit
+> (agent/evals/20260627-030201-taste-audit.md) -> fixed both blocks-shippable
+> findings (translucent sticky filter bar; mobile filter-row clipping) and added
+> a "More from the kitchen" related-dishes section to the detail page. Verdict:
+> agent/evals/20260627-030945-sprint-2.md.
+
 
 **Goal:** Raise the menu from "works" to "appetizing": refine warm palette,
 typography, card composition, photo framing, copy, and the feel of

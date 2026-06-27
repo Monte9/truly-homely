@@ -1,9 +1,9 @@
 # Harness State
 
 - phase: build
-- sprint: 1 done; sprint 2 (taste/motion polish) pending and optional
+- sprint: 1-2 done; sprint 3 (mom's menu admin) in progress
 - attempts: 0
-- last_verdict: PASS (sprint 1, attempt 2)
+- last_verdict: PASS (sprint 2)
 - updated: 2026-06-27
 
 Phase is one of: plan | build | blocked. See `.claude/skills/build-sprint/SKILL.md` for the transition table.
@@ -22,3 +22,4 @@ pass gated on a taste audit; run it only if the human wants more refinement.
 | 2026-06-27 | - | scaffold | Next.js + Vercel hello world app committed |
 | 2026-06-27 | - | plan | menu data uploaded; planner wrote SPEC + BACKLOG (2 sprints) |
 | 2026-06-27 | 1 | build | FAIL attempt 1 (favicon 404 console error); PASS attempt 2, landed on main |
+| 2026-06-27 | 2 | build | taste audit -> 2 blockers fixed (translucent filter bar, mobile filter clip) + detail "More from the kitchen"; PASS, landed on main |
