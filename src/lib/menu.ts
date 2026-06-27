@@ -3,7 +3,7 @@ import data from "@/data/menu.json";
 export type MenuItem = {
   slug: string;
   name: string;
-  price: string | null;
+  price: number | null;
   tags: string[];
   types: string[];
   images: string[];

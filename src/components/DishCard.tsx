@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { motion, type Transition } from "motion/react";
 import type { MenuItem } from "@/lib/menu";
+import { useCart } from "./cart/CartProvider";
+import { formatINR } from "@/lib/format";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -21,6 +23,8 @@ export default function DishCard({
   const scroller = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const multi = item.images.length > 1;
+  const { inCart, add, increment, decrement } = useCart();
+  const qty = inCart(item.slug);
 
   const enter: Transition = reduce
     ? { duration: 0 }
@@ -112,9 +116,9 @@ export default function DishCard({
       <div className="px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-serif text-xl leading-tight text-ink">{item.name}</h3>
-          {item.price && (
-            <span className="shrink-0 rounded-full bg-paper-2 px-3 py-1 text-sm font-bold text-terracotta-ink">
-              {item.price}
+          {item.price != null && (
+            <span className="shrink-0 rounded-full bg-paper-2 px-3 py-1 text-sm font-bold text-terracotta-ink tabular-nums">
+              {formatINR(item.price)}
             </span>
           )}
         </div>
@@ -139,6 +143,46 @@ export default function DishCard({
             ))}
           </div>
         )}
+
+        <div className="mt-4">
+          {qty === 0 ? (
+            <button
+              type="button"
+              data-testid="add-to-cart"
+              onClick={() => add(item.slug)}
+              className="w-full rounded-full bg-terracotta px-4 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_rgba(188,83,40,0.3)] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+            >
+              Add to cart
+            </button>
+          ) : (
+            <div
+              data-testid="card-in-cart"
+              className="flex items-center justify-between rounded-full border border-terracotta/40 bg-terracotta/10 px-2 py-1.5"
+            >
+              <button
+                type="button"
+                data-testid="qty-decrease"
+                onClick={() => decrement(item.slug)}
+                aria-label={`Decrease ${item.name} quantity`}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-card text-lg text-terracotta-ink shadow-sm transition-colors hover:bg-paper-2"
+              >
+                −
+              </button>
+              <span className="text-sm font-bold tabular-nums text-terracotta-ink" aria-live="polite">
+                {qty} in cart
+              </span>
+              <button
+                type="button"
+                data-testid="qty-increase"
+                onClick={() => increment(item.slug)}
+                aria-label={`Increase ${item.name} quantity`}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-card text-lg text-terracotta-ink shadow-sm transition-colors hover:bg-paper-2"
+              >
+                +
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
   );

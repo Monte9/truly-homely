@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fraunces, Nunito } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/components/cart/CartProvider";
+import CartWidget from "@/components/cart/CartWidget";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -28,7 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${nunito.variable}`}>
-      <body>{children}</body>
+      <body>
+        <CartProvider>
+          {children}
+          <CartWidget />
+        </CartProvider>
+      </body>
     </html>
   );
 }

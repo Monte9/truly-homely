@@ -58,6 +58,12 @@ function parseCsv(text) {
 const splitList = (s) =>
   (s || "").split(",").map((x) => x.trim()).filter(Boolean);
 
+// Price in whole rupees as a number (strip currency symbols/commas); null if blank.
+const parsePrice = (s) => {
+  const n = parseFloat(String(s || "").replace(/[^0-9.]/g, ""));
+  return Number.isFinite(n) ? Math.round(n) : null;
+};
+
 async function findCsv(dir) {
   const parent = path.dirname(dir);
   const entries = await fs.readdir(parent);
@@ -114,7 +120,7 @@ async function main() {
     items.push({
       slug,
       name,
-      price: (row.Price || "").trim() || null,
+      price: parsePrice(row.Price),
       tags: splitList(row.Tags),
       types: splitList(row.Type),
       images,

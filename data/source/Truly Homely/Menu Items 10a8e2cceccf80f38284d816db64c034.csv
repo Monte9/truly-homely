@@ -1,20 +1,20 @@
-﻿Name,Price,Tags,Type
-Gujarati Muthiya,₹100.00,,
-Khaman Dhokla,,Navarathri Stall,"Breakfast, Snack"
-Thepla Sabji,,,
-Rava Dokla,,,"Breakfast, Snack"
-Shrikhand,,Navarathri Stall,Dessert
-"Bhindi, Kadi, Roti",,,"Dinner, Lunch, Meal"
-Khandvi,,Navarathri Stall,Snack
-Masala Upma,,,"Breakfast, Snack"
-Sabudana,,,"Breakfast, Snack"
-Monthal,,Navarathri Stall,Dessert
-Roti Paneer Sabji,,,"Dinner, Lunch"
-Hara Bhara Kebab,,,"Breakfast, Snack"
-Gujarati Undhiya,,,
-Aloo Poha,,,Breakfast
-Pav Bhaji,,,
-Laddo,,,
-Momos,,,
-Pakora,,,
-Bhajji,,,
+Name,Price,Tags,Type
+Gujarati Muthiya,100,,
+Khaman Dhokla,80,Navarathri Stall,"Breakfast, Snack"
+Thepla Sabji,130,,
+Rava Dokla,80,,"Breakfast, Snack"
+Shrikhand,150,Navarathri Stall,Dessert
+"Bhindi, Kadi, Roti",190,,"Dinner, Lunch, Meal"
+Khandvi,110,Navarathri Stall,Snack
+Masala Upma,70,,"Breakfast, Snack"
+Sabudana,90,,"Breakfast, Snack"
+Monthal,160,Navarathri Stall,Dessert
+Roti Paneer Sabji,210,,"Dinner, Lunch"
+Hara Bhara Kebab,140,,"Breakfast, Snack"
+Gujarati Undhiya,230,,
+Aloo Poha,60,,Breakfast
+Pav Bhaji,130,,
+Laddo,120,,
+Momos,110,,
+Pakora,90,,
+Bhajji,90,,
