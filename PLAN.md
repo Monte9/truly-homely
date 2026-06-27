@@ -19,6 +19,16 @@ goal is a delightful browsing experience, not an ordering system (yet).
    - Smooth entrance and hover animations; a detail view per dish.
    - Fast images (optimized), mobile-first, accessible.
 
+## Design direction (from the human, 2026-06-27)
+
+- **Look & feel: warm & homely.** Cozy, appetizing, home-kitchen vibe: warm
+  tones, soft cards, big food photos. The visual identity matches the "Truly
+  Homely" name. Not stark-minimal, not neon-bold.
+- **Layout: grid + category filters.** A photo grid of dishes with category
+  tabs/filters, plus a detail view per dish on tap. (See GOAL.md for the rest.)
+
+The planner should treat these as fixed constraints when expanding the spec.
+
 ## How we build
 
 This repo uses an agentic build harness (see [AGENTS.md](AGENTS.md) and
