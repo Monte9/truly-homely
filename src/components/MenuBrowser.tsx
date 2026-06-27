@@ -5,6 +5,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { MenuItem } from "@/lib/menu";
 import { ALL_CATEGORY } from "@/lib/menu";
 import DishCard from "./DishCard";
+import Lightbox from "./Lightbox";
+
+type LightboxState = { images: string[]; index: number; name: string };
 
 export default function MenuBrowser({
   items,
@@ -14,6 +17,7 @@ export default function MenuBrowser({
   categories: string[];
 }) {
   const [active, setActive] = useState<string>(ALL_CATEGORY);
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const reduce = useReducedMotion() ?? false;
 
   const filters = useMemo(() => [ALL_CATEGORY, ...categories], [categories]);
@@ -75,7 +79,13 @@ export default function MenuBrowser({
       >
         <AnimatePresence mode="popLayout">
           {filtered.map((item, i) => (
-            <DishCard key={item.slug} item={item} index={i} reduce={reduce} />
+            <DishCard
+              key={item.slug}
+              item={item}
+              index={i}
+              reduce={reduce}
+              onOpen={(images, index) => setLightbox({ images, index, name: item.name })}
+            />
           ))}
         </AnimatePresence>
       </motion.div>
@@ -85,6 +95,18 @@ export default function MenuBrowser({
           No dishes in this category yet.
         </p>
       )}
+
+      <AnimatePresence>
+        {lightbox && (
+          <Lightbox
+            images={lightbox.images}
+            index={lightbox.index}
+            name={lightbox.name}
+            reduce={reduce}
+            onClose={() => setLightbox(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
